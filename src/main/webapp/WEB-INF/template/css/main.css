@@ -1,0 +1,60 @@
+.big-col {
+    width: 60%;
+}
+
+a:hover {
+    outline: none;
+    text-decoration:none;
+}
+
+a:focus {
+    outline:none;
+    outline-offset: 0;
+}
+
+a {
+    -webkit-transition: 300ms;
+    -moz-transition: 300ms;
+    -o-transition: 300ms;
+    transition: 300ms;
+}
+
+/*=-=-=-=-=-=-=-=-=-=-=-=-=-+
+|       Header CSS          |
++-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+
+.header-top {
+    background: none repeat scroll 0 0 #F0F0E9;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 2em;
+}
+
+.header-bottom {
+    border: 2px solid #F0F0E9;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* Menu */
+
+ul.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.menu li.item-right {
+    float: right;
+    margin-right: 10px;
+}
+
+.menu li.item-left {
+    float: left;
+    margin-left: 10px;
+}
+
+/* Изменения Cards */
+
+.card-header, .card-footer {
+    background-color: #F0F0E9;
+}

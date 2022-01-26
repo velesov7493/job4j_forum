@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="pageTitle" value="Автонарушения" />
+<c:set var="pageTitle" value="Сообщение форума" />
 <%@ include file="../../modules/pageHeader.jsp" %>
 
 <section id="page">
@@ -13,9 +13,10 @@
                 <div class="card-body">
                     <form method="post" action="<c:url value="/post/save"/>">
                         <input type="hidden" name="id" value="${empty post ? 0 : post.id}"/>
+                        <input type="hidden" name="topicId" value="${empty topicId ? 'null' : topicId}"/>
                         <div class="mb-3">
                             <label for="aName">Заголовок:</label>
-                            <input id="aName" class="form-control" name="name" type="text" value="${empty post ? '' : post.name}"/>
+                            <input id="aName" class="form-control" name="caption" type="text" value="${empty post ? '' : post.caption}"/>
                         </div>
                         <div class="mb-3">
                             <label for="aDescription">Текст:</label>

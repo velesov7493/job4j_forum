@@ -20,7 +20,11 @@
                             <input id="aName" class="form-control" name="name" type="text" required/>
                         </div>
                         <div class="mb-3">
-                            <label for="aEmail">Электронная почта (логин):</label>
+                            <label for="aLogin">Логин:</label>
+                            <input id="aLogin" class="form-control" name="login" type="text" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="aEmail">Электронная почта:</label>
                             <input id="aEmail" class="form-control" name="email" type="email" required/>
                         </div>
                         <div class="mb-3">

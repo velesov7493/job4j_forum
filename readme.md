@@ -10,8 +10,10 @@
 ![badge](https://img.shields.io/badge/Bootstrap-5.0-lightgreen)
 ![badge](https://img.shields.io/badge/FontAwesome-4.7-lightgreen)
 ## Страницы приложения ##
-#### Список сообщений ####
+#### Список тем форума ####
 ![screenshoot](images/image001.png)
+#### Список сообщений темы ####
+![screenshoot](images/image005.png)
 #### Редактирование сообщения ####
 ![screenshoot](images/image002.png)
 #### Авторизация ####

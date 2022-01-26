@@ -16,8 +16,8 @@
                     </c:if>
                     <form name="login" method="post" action="<c:url value="/login"/>">
                         <div class="mb-3">
-                            <label for="aEmail">Ваш email (логин):</label>
-                            <input id="aEmail" class="form-control" name="login" type="email" required/>
+                            <label for="aLogin">Логин:</label>
+                            <input id="aLogin" class="form-control" name="login" type="text" required/>
                         </div>
                         <div class="mb-3">
                             <label for="aPass">Пароль:</label>

@@ -16,74 +16,74 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class UserController {
 
-	private final UserService users;
+    private final UserService users;
 
-	public UserController(UserService service) {
-		users = service;
-	}
+    public UserController(UserService service) {
+        users = service;
+    }
 
-	private void handleError(HttpSession session, Model model) {
-		String error = (String) session.getAttribute("error");
-		if (error != null) {
-			model.addAttribute("error", error);
-			session.removeAttribute("error");
-		}
-	}
+    private void handleError(HttpSession session, Model model) {
+        String error = (String) session.getAttribute("error");
+        if (error != null) {
+            model.addAttribute("error", error);
+            session.removeAttribute("error");
+        }
+    }
 
-	@GetMapping("/login")
-	public String loginForm(HttpSession session, Model model) {
-		handleError(session, model);
-		return "user/login";
-	}
+    @GetMapping("/login")
+    public String loginForm(HttpSession session, Model model) {
+        handleError(session, model);
+        return "user/login";
+    }
 
-	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
-		return "redirect:/";
-	}
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
+    }
 
-	@GetMapping("/register")
-	public String registerForm(HttpSession session, Model model) {
-		handleError(session, model);
-		return "user/register";
-	}
+    @GetMapping("/register")
+    public String registerForm(HttpSession session, Model model) {
+        handleError(session, model);
+        return "user/register";
+    }
 
-	@PostMapping("/login")
-	public String login(HttpSession session, @ModelAttribute Authentication auth) {
-		User u = users.login(auth);
-		if (u != null) {
-			session.setAttribute("user", u);
-			return "redirect:/";
-		} else {
-			session.setAttribute("error", "Неправильный логин и/или пароль!");
+    @PostMapping("/login")
+    public String login(HttpSession session, @ModelAttribute Authentication auth) {
+        User u = users.login(auth);
+        if (u != null) {
+            session.setAttribute("user", u);
+            return "redirect:/";
+        } else {
+            session.setAttribute("error", "Неправильный логин и/или пароль!");
 
-			return "redirect:/login";
-		}
-	}
+            return "redirect:/login";
+        }
+    }
 
-	@PostMapping("/register")
-	public String register(
-		HttpSession session,
-		HttpServletRequest req,
-		@ModelAttribute User user
-	) {
-		if (user.getPassword() == null) {
-			session.setAttribute("error", "Пустой пароль!");
-			return "redirect:/register";
-		}
-		if (!user.getPassword().equals(req.getParameter("checkPassword"))) {
-			session.setAttribute("error", "Пароль не совпадает с подтверждением!");
-			return "redirect:/register";
-		}
-		user.setEnabled(true);
-		user.setPassword(Security.getSHA1(user.getPassword()));
-		if (!users.addUser(user)) {
-			session.setAttribute(
-				"error",
-				"Провал сохранения пользователя: указанный email уже используется!"
-			);
-			return "redirect:/register";
-		}
-		return "redirect:/login";
-	}
+    @PostMapping("/register")
+    public String register(
+            HttpSession session,
+            HttpServletRequest req,
+            @ModelAttribute User user
+    ) {
+        if (user.getPassword() == null) {
+            session.setAttribute("error", "Пустой пароль!");
+            return "redirect:/register";
+        }
+        if (!user.getPassword().equals(req.getParameter("checkPassword"))) {
+            session.setAttribute("error", "Пароль не совпадает с подтверждением!");
+            return "redirect:/register";
+        }
+        user.setEnabled(true);
+        user.setPassword(Security.getSHA1(user.getPassword()));
+        if (users.saveUser(user) == null) {
+            session.setAttribute(
+                    "error",
+                    "Провал сохранения пользователя: указанный email уже используется!"
+            );
+            return "redirect:/register";
+        }
+        return "redirect:/login";
+    }
 }

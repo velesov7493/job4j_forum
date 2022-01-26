@@ -10,41 +10,72 @@ import ru.job4j.forum.models.Post;
 import ru.job4j.forum.models.User;
 import ru.job4j.forum.services.PostService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class PostController {
 
-	private final PostService posts;
+    private final PostService posts;
 
-	public PostController(PostService service) {
-		posts = service;
-	}
+    public PostController(PostService service) {
+        posts = service;
+    }
 
-	@GetMapping({"/", "/home"})
-	public String indexPage(Model model) {
-		model.addAttribute("posts", posts.getAll());
-		return "post/list";
-	}
+    @GetMapping({"/", "/home"})
+    public String indexPage(Model model) {
+        model.addAttribute("posts", posts.findAllTopics());
+        return "post/topicList";
+    }
 
-	@GetMapping("/post/{id}")
-	public String editPost(@PathVariable(name = "id") int postId, Model model) {
-		model.addAttribute("post", posts.getPostById(postId));
-		return "post/edit";
-	}
+    @GetMapping("/topic/{id}/posts")
+    public String topicPosts(@PathVariable(name = "id") int topicId, Model model) {
+        List<Post> postList = new ArrayList<>();
+        postList.add(posts.findById(topicId));
+        postList.addAll(posts.findAllByTopicId(topicId));
+        model.addAttribute("posts", postList);
+        model.addAttribute("topicId", topicId);
+        return "post/postList";
+    }
 
-	@GetMapping("/post/add")
-	public String editPost() {
-		return "post/edit";
-	}
+    @GetMapping("/post/{id}")
+    public String editPost(@PathVariable(name = "id") int postId, Model model) {
+        model.addAttribute("post", posts.findById(postId));
+        return "post/edit";
+    }
 
-	@PostMapping("/post/save")
-	public String savePost(HttpSession session, @ModelAttribute Post post) {
-		User u = (User) session.getAttribute("user");
-		if (u == null) {
-			return "redirect:/login";
-		}
-		posts.savePost(post);
-		return "redirect:/";
-	}
+    @GetMapping("/post/{id}/delete")
+    public String deletePost(HttpSession session, @PathVariable(name = "id") int postId) {
+        User u = (User) session.getAttribute("user");
+        if (u == null) {
+            return "redirect:/login";
+        }
+        posts.deleteById(postId);
+        return "redirect:/";
+    }
+
+    @GetMapping("/topic/{id}/add-post")
+    public String addPost(@PathVariable(name = "id") int topicId, Model model) {
+        model.addAttribute("topicId", topicId);
+        return "post/edit";
+    }
+
+    @GetMapping("/topic/add")
+    public String addTopic() {
+        return "post/edit";
+    }
+
+    @PostMapping("/post/save")
+    public String savePost(HttpSession session, HttpServletRequest req, @ModelAttribute Post post) {
+        User u = (User) session.getAttribute("user");
+        if (u == null) {
+            return "redirect:/login";
+        }
+        String sTopicId = req.getParameter("topicId");
+        int topicId = sTopicId == null ? 0 : Integer.parseInt(sTopicId);
+        posts.save(post, u, topicId);
+        return "redirect:/";
+    }
 }

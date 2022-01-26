@@ -2,44 +2,50 @@ package ru.job4j.forum.services;
 
 import org.springframework.stereotype.Service;
 import ru.job4j.forum.models.Post;
+import ru.job4j.forum.models.User;
+import ru.job4j.forum.repositories.PostRepository;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class PostService {
 
-	private final Map<Integer, Post> posts = new HashMap<>();
-	private final AtomicInteger generator = new AtomicInteger(0);
+    private final PostRepository posts;
 
-	public PostService() {
-		Post p = Post.of("Пример темы");
-		p.setDescription("Текст сообщения темы");
-		addPost(p);
-	}
+    public PostService(PostRepository repo) {
+        posts = repo;
+    }
 
-	public Collection<Post> getAll() {
-		return posts.values();
-	}
+    public List<Post> findAllByTopicId(int topicId) {
+        return posts.findAllByTopicId(topicId);
+    }
 
-	private void addPost(Post value) {
-		value.setId(generator.incrementAndGet());
-		posts.put(value.getId(), value);
-	}
+    public List<Post> findAllByAuthorId(int authorId) {
+        return posts.findAllByAuthorId(authorId);
+    }
 
-	private void updatePost(Post value) {
-		posts.put(value.getId(), value);
-	}
+    public List<Post> findAll() {
+        return posts.findAll();
+    }
 
-	public void savePost(Post value) {
-		if (value.getId() == 0) {
-			addPost(value);
-		} else {
-			updatePost(value);
-		}
-	}
+    public List<Post> findAllTopics() {
+        return posts.findAllTopics();
+    }
 
-	public Post getPostById(int postId) {
-		return posts.get(postId);
-	}
+    public Post save(Post value, User author, int topicId) {
+        if (topicId != 0) {
+            Post topic = findById(topicId);
+            value.setTopic(topic);
+        }
+        value.setAuthor(author);
+        return posts.save(value);
+    }
+
+    public Post findById(Integer integer) {
+        return posts.findById(integer).orElse(null);
+    }
+
+    public void deleteById(Integer integer) {
+        posts.deleteById(integer);
+    }
 }

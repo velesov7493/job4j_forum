@@ -1,0 +1,28 @@
+DROP TABLE IF EXISTS tj_posts;
+DROP TABLE IF EXISTS tz_users;
+DROP TABLE IF EXISTS tz_roles;
+
+CREATE TABLE tz_roles (
+    id INTEGER PRIMARY KEY,
+    authority VARCHAR(50) NOT NULL UNIQUE,
+    name VARCHAR(120) NOT NULL
+);
+
+CREATE TABLE tz_users (
+    id SERIAL PRIMARY KEY,
+    id_role INTEGER DEFAULT 1 REFERENCES tz_roles (id) ON DELETE RESTRICT,
+    enabled BOOLEAN DEFAULT TRUE,
+    name VARCHAR(120) NOT NULL,
+    login VARCHAR(120) NOT NULL UNIQUE,
+    email VARCHAR(120) NOT NULL UNIQUE,
+    pass VARCHAR(40) NOT NULL
+);
+
+CREATE TABLE tj_posts (
+    id SERIAL PRIMARY KEY,
+    id_author INTEGER REFERENCES tz_users (id) ON DELETE SET NULL,
+    id_topic INTEGER REFERENCES tj_posts (id) ON DELETE CASCADE,
+    caption VARCHAR(250) NOT NULL,
+    description TEXT,
+    created TIMESTAMP DEFAULT current_timestamp
+);

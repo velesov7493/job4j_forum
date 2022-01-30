@@ -72,7 +72,8 @@ public class PostController {
         User currentUser = (User) s.getAttribute("user");
         String sTopicId = req.getParameter("topicId");
         int topicId = sTopicId == null ? 0 : Integer.parseInt(sTopicId);
-        posts.save(post, currentUser.getId(), topicId);
+        int authorId = currentUser == null ? 0 : currentUser.getId();
+        posts.save(post, authorId, topicId);
         return "redirect:/";
     }
 }

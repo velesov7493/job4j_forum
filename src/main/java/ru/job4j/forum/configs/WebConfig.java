@@ -1,6 +1,9 @@
 package ru.job4j.forum.configs;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -18,5 +21,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry
                 .addResourceHandler("/fonts/**")
                 .addResourceLocations("/WEB-INF/template/fonts/");
+    }
+
+    @Bean
+    public PasswordEncoder passEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

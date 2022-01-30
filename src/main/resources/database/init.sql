@@ -15,7 +15,7 @@ CREATE TABLE tz_users (
     name VARCHAR(120) NOT NULL,
     login VARCHAR(120) NOT NULL UNIQUE,
     email VARCHAR(120) NOT NULL UNIQUE,
-    pass VARCHAR(40) NOT NULL
+    pass VARCHAR(120) NOT NULL
 );
 
 CREATE TABLE tj_posts (

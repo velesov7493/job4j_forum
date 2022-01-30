@@ -1,5 +1,6 @@
 package ru.job4j.forum.controllers;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,10 @@ public class PostController {
     }
 
     @GetMapping("/topic/{id}/posts")
-    public String topicPosts(@PathVariable(name = "id") int topicId, Model model) {
+    public String topicPosts(
+            @PathVariable(name = "id") int topicId,
+            Model model
+    ) {
         List<Post> postList = new ArrayList<>();
         postList.add(posts.findById(topicId));
         postList.addAll(posts.findAllByTopicId(topicId));
@@ -47,11 +51,7 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}/delete")
-    public String deletePost(HttpSession session, @PathVariable(name = "id") int postId) {
-        User u = (User) session.getAttribute("user");
-        if (u == null) {
-            return "redirect:/login";
-        }
+    public String deletePost(@PathVariable(name = "id") int postId) {
         posts.deleteById(postId);
         return "redirect:/";
     }
@@ -68,14 +68,11 @@ public class PostController {
     }
 
     @PostMapping("/post/save")
-    public String savePost(HttpSession session, HttpServletRequest req, @ModelAttribute Post post) {
-        User u = (User) session.getAttribute("user");
-        if (u == null) {
-            return "redirect:/login";
-        }
+    public String savePost(HttpSession s, HttpServletRequest req, @ModelAttribute Post post) {
+        User currentUser = (User) s.getAttribute("user");
         String sTopicId = req.getParameter("topicId");
         int topicId = sTopicId == null ? 0 : Integer.parseInt(sTopicId);
-        posts.save(post, u, topicId);
+        posts.save(post, currentUser.getId(), topicId);
         return "redirect:/";
     }
 }

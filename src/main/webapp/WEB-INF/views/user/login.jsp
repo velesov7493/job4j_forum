@@ -14,10 +14,14 @@
                     <c:if test="${not empty error}">
                         <div class="status alert alert-danger"><p>${error}</p></div>
                     </c:if>
+                    <c:if test="${not empty message}">
+                        <div class="status alert alert-success"><p>${message}</p></div>
+                    </c:if>
                     <form name="login" method="post" action="<c:url value="/login"/>">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         <div class="mb-3">
                             <label for="aLogin">Логин:</label>
-                            <input id="aLogin" class="form-control" name="login" type="text" required/>
+                            <input id="aLogin" class="form-control" name="username" type="text" required/>
                         </div>
                         <div class="mb-3">
                             <label for="aPass">Пароль:</label>

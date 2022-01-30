@@ -11,9 +11,11 @@ import java.util.*;
 public class PostService {
 
     private final PostRepository posts;
+    private final UserService users;
 
-    public PostService(PostRepository repo) {
+    public PostService(PostRepository repo, UserService s) {
         posts = repo;
+        users = s;
     }
 
     public List<Post> findAllByTopicId(int topicId) {
@@ -32,13 +34,15 @@ public class PostService {
         return posts.findAllTopics();
     }
 
-    public Post save(Post value, User author, int topicId) {
+    public void save(Post value, int userId, int topicId) {
         if (topicId != 0) {
             Post topic = findById(topicId);
             value.setTopic(topic);
         }
-        value.setAuthor(author);
-        return posts.save(value);
+        if (userId != 0) {
+            value.setAuthor(users.getUserById(userId));
+        }
+        posts.save(value);
     }
 
     public Post findById(Integer integer) {

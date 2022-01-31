@@ -71,7 +71,7 @@ public class PostController {
     public String savePost(HttpSession s, HttpServletRequest req, @ModelAttribute Post post) {
         User currentUser = (User) s.getAttribute("user");
         String sTopicId = req.getParameter("topicId");
-        int topicId = sTopicId == null ? 0 : Integer.parseInt(sTopicId);
+        int topicId = sTopicId == null || "null".equals(sTopicId) ? 0 : Integer.parseInt(sTopicId);
         int authorId = currentUser == null ? 0 : currentUser.getId();
         posts.save(post, authorId, topicId);
         return "redirect:/";

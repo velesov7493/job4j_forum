@@ -37,67 +37,67 @@ public class PostControllerTest {
     @Test
     public void shouldReturnHomePage() throws Exception {
         mockMvc.perform(
-            get("/home"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(view().name("post/topicList")
-        );
+                get("/home"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("post/topicList")
+                );
     }
 
     @Test
     @WithMockUser
     public void shouldReturnTopicPosts() throws Exception {
         mockMvc.perform(
-            get("/topic/1/posts"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(view().name("post/postList")
-        );
+                get("/topic/1/posts"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("post/postList")
+                );
     }
 
     @Test
     @WithMockUser
     public void shouldReturnPostEditPage() throws Exception {
         mockMvc.perform(
-            get("/post/1"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(view().name("post/edit")
-        );
+                get("/post/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("post/edit")
+                );
     }
 
     @Test
     @WithMockUser
     public void shouldReturnTopic1PostEditPage() throws Exception {
         mockMvc.perform(
-            get("/topic/1/add-post"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(view().name("post/edit")
-        );
+                get("/topic/1/add-post"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("post/edit")
+                );
     }
 
     @Test
     @WithMockUser
     public void shouldReturnTopicPostEditPage() throws Exception {
         mockMvc.perform(
-            get("/topic/add"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(view().name("post/edit")
-        );
+                get("/topic/add"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("post/edit")
+                );
     }
 
     @Test
     @WithMockUser
     public void shouldPostServiceSaveCall() throws Exception {
         mockMvc.perform(
-            post("/post/save")
-            .param("caption","Куплю ладу-грант. Дорого.")
-            .param("description","Телефон: 89016931112")
-            .param("topicId","1")
+                post("/post/save")
+                        .param("caption", "Куплю ладу-грант. Дорого.")
+                        .param("description", "Телефон: 89016931112")
+                        .param("topicId", "1")
         ).andDo(print())
-        .andExpect(status().is3xxRedirection());
+                .andExpect(status().is3xxRedirection());
         ArgumentCaptor<Post> argument = ArgumentCaptor.forClass(Post.class);
         verify(posts, times(1)).save(argument.capture(), eq(0), eq(1));
         assertThat(argument.getValue().getCaption(), is("Куплю ладу-грант. Дорого."));

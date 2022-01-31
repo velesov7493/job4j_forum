@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.forum.models.Role;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Integer> { }
+public interface RoleRepository extends JpaRepository<Role, Integer> {
+}

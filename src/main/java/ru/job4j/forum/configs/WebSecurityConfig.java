@@ -22,51 +22,48 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private PasswordEncoder passEncoder;
     private DataSource ds;
-    private UserService users;
 
     public WebSecurityConfig(
             PasswordEncoder encoder,
-            DataSource dataSource,
-            UserService service1
+            DataSource dataSource
     ) {
         passEncoder = encoder;
         ds = dataSource;
-        users = service1;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         String usersSQL =
-            "SELECT login AS username, pass AS password, enabled "
-            + "FROM tz_users WHERE login = ?";
+                "SELECT login AS username, pass AS password, enabled "
+                + "FROM tz_users WHERE login = ?";
         String rolesSQL =
-            "SELECT u.login AS username, a.authority "
-            + "FROM tz_roles AS a "
-            + "INNER JOIN tz_users AS u ON a.id=u.id_role AND u.login=?";
+                "SELECT u.login AS username, a.authority "
+                + "FROM tz_roles AS a "
+                + "INNER JOIN tz_users AS u ON a.id=u.id_role AND u.login=?";
         auth
-        .jdbcAuthentication()
-        .passwordEncoder(passEncoder)
-        .dataSource(ds)
-        .usersByUsernameQuery(usersSQL)
-        .authoritiesByUsernameQuery(rolesSQL);
+                .jdbcAuthentication()
+                .passwordEncoder(passEncoder)
+                .dataSource(ds)
+                .usersByUsernameQuery(usersSQL)
+                .authoritiesByUsernameQuery(rolesSQL);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-        .antMatchers(
-                "/", "/home", "/login", "/register", "/scripts/**", "/styles/**", "/fonts/**"
-        ).permitAll()
-        .antMatchers("/**").hasAnyRole("ADMIN", "USER")
-        .and()
-        .formLogin().loginPage("/login")
-        .defaultSuccessUrl("/login?success=true")
-        .failureUrl("/login?error=true").permitAll()
-        .and()
-        .logout().logoutSuccessUrl("/login?logout=true")
-        .invalidateHttpSession(true).permitAll()
-        .and()
-        .csrf().disable();
+                .antMatchers(
+                    "/", "/home", "/login", "/register", "/scripts/**", "/styles/**", "/fonts/**"
+                ).permitAll()
+                .antMatchers("/**").hasAnyRole("ADMIN", "USER")
+                .and()
+                .formLogin().loginPage("/login")
+                .defaultSuccessUrl("/login?success=true")
+                .failureUrl("/login?error=true").permitAll()
+                .and()
+                .logout().logoutSuccessUrl("/login?logout=true")
+                .invalidateHttpSession(true).permitAll()
+                .and()
+                .csrf().disable();
     }
 
     @Bean

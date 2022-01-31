@@ -17,6 +17,8 @@ public class Post {
     private int id;
     private String caption;
     private String description;
+    @Column(insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Calendar created;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_topic")

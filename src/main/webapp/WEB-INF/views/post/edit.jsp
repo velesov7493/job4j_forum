@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="pageTitle" value="Сообщение форума" />
+<c:set var="pageTitle" value="Сообщение форума"/>
 <%@ include file="../../modules/pageHeader.jsp" %>
 
 <section id="page">
@@ -16,11 +16,13 @@
                         <input type="hidden" name="topicId" value="${empty topicId ? 'null' : topicId}"/>
                         <div class="mb-3">
                             <label for="aName">Заголовок:</label>
-                            <input id="aName" class="form-control" name="caption" type="text" value="${empty post ? '' : post.caption}"/>
+                            <input id="aName" class="form-control" name="caption" type="text"
+                                   value="${empty post ? '' : post.caption}"/>
                         </div>
                         <div class="mb-3">
                             <label for="aDescription">Текст:</label>
-                            <textarea id="aDescription" class="form-control" name="description">${empty post ? '' : post.description}</textarea>
+                            <textarea id="aDescription" class="form-control"
+                                      name="description">${empty post ? '' : post.description}</textarea>
                         </div>
                         <div class="mb-3">
                             <button type="submit" class="pull-right btn btn-primary">Сохранить</button>

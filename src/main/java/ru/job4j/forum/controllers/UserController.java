@@ -37,10 +37,10 @@ public class UserController {
 
     @GetMapping("/login")
     public String loginForm(
-        @RequestParam(value = "error", required = false) String error,
-        @RequestParam(value = "logout", required = false) String logout,
-        @RequestParam(value = "success", required = false) String success,
-        Authentication auth, HttpSession session, Model model
+            @RequestParam(value = "error", required = false) String error,
+            @RequestParam(value = "logout", required = false) String logout,
+            @RequestParam(value = "success", required = false) String success,
+            Authentication auth, HttpSession session, Model model
     ) {
         if (error != null) {
             model.addAttribute("error", "Неверный логин и/или пароль!");
@@ -48,9 +48,8 @@ public class UserController {
         if (logout != null) {
             model.addAttribute("message", "Вы покидаете форум. До свидания.");
         }
-        if (success != null && auth != null) {
-            User curUser = users.getCurrentUser(auth);
-            session.setAttribute("user", curUser);
+        if (success != null) {
+            session.setAttribute("user", users.getCurrentUser(auth));
             return "redirect:/";
         }
         return "user/login";

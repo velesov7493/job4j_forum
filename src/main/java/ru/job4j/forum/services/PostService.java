@@ -1,5 +1,7 @@
 package ru.job4j.forum.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.job4j.forum.models.Post;
 import ru.job4j.forum.models.User;
@@ -9,6 +11,8 @@ import java.util.*;
 
 @Service
 public class PostService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PostService.class);
 
     private final PostRepository posts;
     private final UserService users;
@@ -34,22 +38,32 @@ public class PostService {
         return posts.findAllTopics();
     }
 
-    public void save(Post value, int userId, int topicId) {
-        if (topicId != 0) {
-            Post topic = findById(topicId);
-            value.setTopic(topic);
+    public Post save(Post value, int userId, int topicId) {
+        Post result = null;
+        try {
+            if (topicId != 0) {
+                Post topic = findById(topicId);
+                value.setTopic(topic);
+            }
+            if (userId != 0) {
+                value.setAuthor(users.getUserById(userId));
+            }
+            result = posts.save(value);
+        } catch (Throwable ex) {
+            LOG.error("Ошибка сохранения сообщения/темы: ", ex);
         }
-        if (userId != 0) {
-            value.setAuthor(users.getUserById(userId));
-        }
-        posts.save(value);
+        return result;
     }
 
     public Post findById(Integer integer) {
         return posts.findById(integer).orElse(null);
     }
 
-    public void deleteById(Integer integer) {
-        posts.deleteById(integer);
+    public void deleteById(Integer postId) {
+        try {
+            posts.deleteById(postId);
+        } catch (Throwable ex) {
+            LOG.error("Ошибка удаления сообщения/темы: ", ex);
+        }
     }
 }

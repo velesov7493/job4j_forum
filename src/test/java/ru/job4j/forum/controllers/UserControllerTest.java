@@ -33,34 +33,34 @@ public class UserControllerTest {
     @Test
     public void shouldReturnLoginPage() throws Exception {
         mockMvc.perform(
-            get("/login"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(view().name("user/login")
-        );
+                get("/login"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/login")
+                );
     }
 
     @Test
     public void shouldReturnRegisterPage() throws Exception {
         mockMvc.perform(
-            get("/register"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(view().name("user/register")
-        );
+                get("/register"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/register")
+                );
     }
 
     @Test
     public void shouldUserServiceSaveCall() throws Exception {
         mockMvc.perform(
-            post("/register")
-            .param("name","Власов Александр Сергеевич")
-            .param("login","sysdba")
-            .param("email","velesov7493@yandex.ru")
-            .param("password", "masterkey")
-            .param("checkPassword", "masterkey")
+                post("/register")
+                        .param("name", "Власов Александр Сергеевич")
+                        .param("login", "sysdba")
+                        .param("email", "velesov7493@yandex.ru")
+                        .param("password", "masterkey")
+                        .param("checkPassword", "masterkey")
         ).andDo(print())
-        .andExpect(status().is3xxRedirection());
+                .andExpect(status().is3xxRedirection());
         ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
         verify(users, times(1)).saveUser(argument.capture());
         assertThat(argument.getValue().getName(), is("Власов Александр Сергеевич"));

@@ -1,5 +1,7 @@
 package ru.job4j.forum.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Service
 public class UserService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository users;
     private final RoleRepository roles;
@@ -37,8 +41,14 @@ public class UserService {
     }
 
     public User saveUser(User value) {
-        value.setRole(findRoleById(2));
-        return users.save(value);
+        User result = null;
+        try {
+            value.setRole(findRoleById(2));
+            result = users.save(value);
+        } catch (Throwable ex) {
+            LOG.error("Ошибка сохранения пользователя: ", ex);
+        }
+        return result;
     }
 
     public void deleteUserById(int userId) {
@@ -50,7 +60,13 @@ public class UserService {
     }
 
     public Role saveRole(Role value) {
-        return roles.save(value);
+        Role result = null;
+        try {
+            result = roles.save(value);
+        } catch (Throwable ex) {
+            LOG.error("Ошибка сохранения роли: ", ex);
+        }
+        return result;
     }
 
     public Role findRoleById(int roleId) {
@@ -58,6 +74,10 @@ public class UserService {
     }
 
     public void deleteById(int roleId) {
-        roles.deleteById(roleId);
+        try {
+            roles.deleteById(roleId);
+        } catch (Throwable ex) {
+            LOG.error("Ошибка удаления роли: ", ex);
+        }
     }
 }
